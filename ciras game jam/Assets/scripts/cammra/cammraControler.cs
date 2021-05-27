@@ -55,15 +55,17 @@ public class cammraControler : MonoBehaviour
         changeTracked(target);
         startPos = new Vector3(transform.position.x, transform.position.y, cammraZ);
         StartCoroutine(MoveToLoc(duration,defaltTracked));
+        StartCoroutine(endShot());
     }
     //has to be called as a coroutine
     public IEnumerator StartCinimatic(float duration,Transform[] targetList)
     {
+        Debug.Log("list being called");
         smooth = true;
         //loop through each transform in postion and move to them and wait untill done to triger next
         for (int i=0;i<targetList.Length;i++)
         {
-            startPos = new Vector3(transform.position.x, transform.position.y, cammraZ);
+            changeTracked(targetList[i]);
             yield return StartCoroutine(MoveToLoc(duration, targetList[i]));
         }
         //this resets to player
@@ -78,7 +80,6 @@ public class cammraControler : MonoBehaviour
         }
         //hold the shot for duration
         yield return new WaitForSecondsRealtime(duration);
-        yield return StartCoroutine(endShot());
     }
     private IEnumerator endShot()
     {
