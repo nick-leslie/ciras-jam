@@ -20,6 +20,7 @@ public class cammraControler : MonoBehaviour
 
 
     //this is for lerping to a static position if the smooth flag is set
+    [SerializeField]
     private Vector3 startPos;
 
     // Start is called before the first frame update
@@ -31,11 +32,12 @@ public class cammraControler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Vector3 target = new Vector3(currentTracked.position.x, currentTracked.position.y, cammraZ);
         if (smooth == false)
         {
             //this is the path for if it is just tracking 
             //this is most commonly used during gameplay 
-            transform.position = new Vector3(currentTracked.position.x, currentTracked.position.y, cammraZ);
+            transform.position = target;
         } else
         {
             //this is for moving if the smooth flag is set
@@ -45,10 +47,11 @@ public class cammraControler : MonoBehaviour
 
 
                 //this is the target tracked postion with the new z 
-                Vector3 target = new Vector3(currentTracked.position.x, currentTracked.position.y, cammraZ);
+                
 
+                //this is the thing messing it up
                 //change the positon
-                transform.position = Vector3.Lerp(startPos,target, cammraSpeed);
+                transform.position = Vector3.MoveTowards(transform.position, target, cammraSpeed * Time.deltaTime);
             }
         }
     }
@@ -63,7 +66,7 @@ public class cammraControler : MonoBehaviour
         smooth = true;
         changeTracked(target);
         startPos = new Vector3(transform.position.x, transform.position.y, cammraZ);
-        StartCoroutine(endSmooth(duration,defaltTracked));
+        StartCoroutine(MoveToLoc(duration,defaltTracked));
     }
     //has to be called as a coroutine
     public IEnumerator StartCinimatic(float duration,Transform[] targetList)
@@ -73,12 +76,12 @@ public class cammraControler : MonoBehaviour
         for (int i=0;i<targetList.Length;i++)
         {
             startPos = new Vector3(transform.position.x, transform.position.y, cammraZ);
-            yield return StartCoroutine(endSmooth(duration, targetList[i]));
+            yield return StartCoroutine(MoveToLoc(duration, targetList[i]));
         }
         //this resets to player
-        StartCoroutine(endSmooth(duration, defaltTracked));
+        StartCoroutine(endShot());
     }
-    private IEnumerator endSmooth(float duration,Transform newTracked)
+    private IEnumerator MoveToLoc(float duration,Transform newTracked)
     {
         //wait untill the cammra is within range
         while(Vector2.Distance(transform.position, currentTracked.position) > closeDistence)
@@ -86,10 +89,17 @@ public class cammraControler : MonoBehaviour
             yield return null;
         }
         //hold the shot for duration
-        yield return new WaitForSeconds(duration);
-        //end the shot
-        smooth = false;
-        changeTracked(newTracked);
+        yield return new WaitForSecondsRealtime(duration);
+        yield return StartCoroutine(endShot());
     }
-    
+    private IEnumerator endShot()
+    {
+        Debug.Log("riddle me piss batman");
+        changeTracked(defaltTracked);
+        while (Vector2.Distance(transform.position, currentTracked.position) > closeDistence)
+        {
+            yield return null;
+        }
+        smooth = false;
+    }
 }
