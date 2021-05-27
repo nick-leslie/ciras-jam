@@ -79,7 +79,7 @@ public class cammraControler : MonoBehaviour
             yield return StartCoroutine(MoveToLoc(duration, targetList[i]));
         }
         //this resets to player
-        StartCoroutine(endShot());
+        yield return StartCoroutine(endShot());
     }
     private IEnumerator MoveToLoc(float duration,Transform newTracked)
     {
@@ -98,6 +98,7 @@ public class cammraControler : MonoBehaviour
         changeTracked(defaltTracked);
         while (Vector2.Distance(transform.position, currentTracked.position) > closeDistence)
         {
+            Debug.Log("falls");
             yield return null;
         }
         smooth = false;
