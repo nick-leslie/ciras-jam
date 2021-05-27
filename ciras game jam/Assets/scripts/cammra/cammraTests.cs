@@ -24,7 +24,14 @@ public class cammraTests : MonoBehaviour
             //checking if cammra controler exists
             if (controler != null)
             {
-                controler.StartCinimatic(0.5f,targetList[0]);
+                if (targetList.Length > 1)
+                {
+                    StartCoroutine(controler.StartCinimatic(0.5f, targetList));
+                }
+                else
+                {
+                    controler.StartCinimatic(0.5f, targetList[0]);
+                }
             }
             RunTests = false;
         }

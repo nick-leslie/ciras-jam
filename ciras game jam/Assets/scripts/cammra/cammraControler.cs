@@ -40,19 +40,7 @@ public class cammraControler : MonoBehaviour
             transform.position = target;
         } else
         {
-            //this is for moving if the smooth flag is set
-            if (currentTracked != defaltTracked)
-            {
-                //this path expects start pos to be set using the start cinima call
-
-
-                //this is the target tracked postion with the new z 
-                
-
-                //this is the thing messing it up
-                //change the positon
-                transform.position = Vector3.MoveTowards(transform.position, target, cammraSpeed * Time.deltaTime);
-            }
+            transform.position = Vector3.MoveTowards(transform.position, target, cammraSpeed * Time.deltaTime);
         }
     }
     private void changeTracked(Transform newTracked)
@@ -94,11 +82,9 @@ public class cammraControler : MonoBehaviour
     }
     private IEnumerator endShot()
     {
-        Debug.Log("riddle me piss batman");
         changeTracked(defaltTracked);
         while (Vector2.Distance(transform.position, currentTracked.position) > closeDistence)
         {
-            Debug.Log("falls");
             yield return null;
         }
         smooth = false;
