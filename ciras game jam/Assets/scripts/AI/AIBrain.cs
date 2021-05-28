@@ -15,12 +15,12 @@ public class AIBrain : MonoBehaviour
     }
     [Header("flags")]
     [Header("pathfiding type")]
-    private bool patrol;
-    private bool flying;
+    public bool patrol;
+    public bool flying;
     [Header("combat type")]
-    private bool ranged;
-    private bool collison;
-    private bool melee;
+    public bool ranged;
+    public bool collison;
+    public bool melee;
     public bool hold;
     // Start is called before the first frame update
     void Start()
