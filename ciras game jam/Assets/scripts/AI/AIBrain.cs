@@ -13,6 +13,8 @@ public class AIBrain : MonoBehaviour
             return player;
         }
     }
+    [Header("genaral stuff")]
+    public int speed;
     [Header("flags")]
     [Header("pathfiding type")]
     public bool patrol;
@@ -32,10 +34,5 @@ public class AIBrain : MonoBehaviour
     void Update()
     {
         
-    }
-    //returns a direction of movment
-    private Vector3 PathFind()
-    {
-        return Vector3.zero;
     }
 }

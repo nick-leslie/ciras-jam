@@ -10,6 +10,9 @@ public class AIDetection : MonoBehaviour
     private List<GameObject> collisons;
     [SerializeField]
     private string[] targetTags;
+    private float detectionTimer;
+    [SerializeField]
+    private float maxSeenTime;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,7 +23,7 @@ public class AIDetection : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
+    //check if the things in the detection zone is visable
     void FixedUpdate()
     {
         if (collisons.Count > 0)
@@ -31,12 +34,16 @@ public class AIDetection : MonoBehaviour
                 //send out a ray cast to the player and see if it collides while player is in the detection zone
                 Vector3 targetDirection = collisons[i].transform.position - transform.position;
                 RaycastHit2D lineOfSight = Physics2D.Raycast(transform.position, targetDirection);
-                Debug.DrawLine(transform.position, lineOfSight.collider.transform.position);
                 if (lineOfSight.collider != null)
                 {
-                    if(lineOfSight.collider.gameObject == collisons[i].gameObject)
+                    Debug.DrawLine(transform.position, lineOfSight.collider.transform.position);
+                    if (lineOfSight.collider.gameObject == collisons[i].gameObject)
                     {
-                        detected();
+                        detectionTimer += Time.deltaTime;
+                        if(detectionTimer > maxSeenTime)
+                        {
+                            detected();
+                        }
                     }
                 }
             }
@@ -46,6 +53,7 @@ public class AIDetection : MonoBehaviour
     {
 
     }
+    //adds gameobjects to the inneer dettection list
     private void OnTriggerEnter2D(Collider2D collision)
     {
         for (int i = 0; i < targetTags.Length; i++)
@@ -57,8 +65,10 @@ public class AIDetection : MonoBehaviour
         }
     }
 
+    //removes gameobeject from the inner detection list
     private void OnTriggerExit2D(Collider2D collision)
     {
+
         for (int i = 0; i < targetTags.Length; i++)
         {
             if (collision.gameObject.CompareTag(targetTags[i]))
