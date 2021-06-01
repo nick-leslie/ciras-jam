@@ -21,27 +21,36 @@ public class AIMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (OverideTarget != null)
+        if (brain.flying == true)
         {
-            if (currentPoint < points.Length)
+            if (OverideTarget != null)
             {
-                if (Vector3.Distance(transform.position, points[currentPoint].position) > closeDistence)
+                if (currentPoint < points.Length)
                 {
-                    transform.position = Vector3.MoveTowards(transform.position, points[currentPoint].position, brain.speed * Time.deltaTime);
+                    if (Vector3.Distance(transform.position, points[currentPoint].position) > closeDistence)
+                    {
+                        transform.position = Vector3.MoveTowards(transform.position, points[currentPoint].position, brain.speed * Time.deltaTime);
+                    }
+                    else
+                    {
+                        currentPoint += 1;
+                    }
                 }
                 else
                 {
-                    currentPoint += 1;
+                    currentPoint = 0;
                 }
             }
             else
             {
-                currentPoint = 0;
+                //this is for if they need to move towards something else like the player
+                transform.position = Vector3.MoveTowards(transform.position, OverideTarget.transform.position, brain.speed * Time.deltaTime);
             }
-        } else
+        } 
+        else
         {
-            //this is for if they need to move towards something else like the player
-            transform.position = Vector3.MoveTowards(transform.position, OverideTarget.transform.position, brain.speed * Time.deltaTime);
+            //rigigd body movment
+
         }
     }
 }
