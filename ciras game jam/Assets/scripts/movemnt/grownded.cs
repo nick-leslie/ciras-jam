@@ -12,7 +12,6 @@ public class grownded : MonoBehaviour
     // when the GameObjects collider arrange for this GameObject to travel to the left of the screen
     void OnTriggerEnter2D(Collider2D col)
     {
-        Debug.Log("it is not working");
         if (ground==(ground | (1 << col.gameObject.layer)))
         {
             Debug.Log(col.gameObject.name + " : " + gameObject.name + " : " + Time.time);
