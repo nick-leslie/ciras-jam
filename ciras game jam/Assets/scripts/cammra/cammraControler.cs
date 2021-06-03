@@ -32,15 +32,19 @@ public class cammraControler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector3 target = new Vector3(currentTracked.position.x, currentTracked.position.y, cammraZ);
-        if (smooth == false)
+        if (currentTracked != null)
         {
-            //this is the path for if it is just tracking 
-            //this is most commonly used during gameplay 
-            transform.position = target;
-        } else
-        {
-            transform.position = Vector3.MoveTowards(transform.position, target, cammraSpeed * Time.deltaTime);
+            Vector3 target = new Vector3(currentTracked.position.x, currentTracked.position.y, cammraZ);
+            if (smooth == false)
+            {
+                //this is the path for if it is just tracking 
+                //this is most commonly used during gameplay 
+                transform.position = target;
+            }
+            else
+            {
+                transform.position = Vector3.MoveTowards(transform.position, target, cammraSpeed * Time.deltaTime);
+            }
         }
     }
     private void changeTracked(Transform newTracked)

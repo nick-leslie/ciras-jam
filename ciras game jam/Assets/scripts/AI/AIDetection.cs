@@ -13,6 +13,10 @@ public class AIDetection : MonoBehaviour
     private float detectionTimer;
     [SerializeField]
     private float maxSeenTime;
+    private AIMovement movment;
+    [SerializeField]
+    private int maxChaseTime;
+    private int chaseTime;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,6 +24,7 @@ public class AIDetection : MonoBehaviour
         if (brain == null)
         {
             brain = transform.parent.GetComponent<AIBrain>();
+            movment = transform.parent.GetComponent<AIMovement>();
         }
     }
 
@@ -42,16 +47,28 @@ public class AIDetection : MonoBehaviour
                         detectionTimer += Time.deltaTime;
                         if(detectionTimer > maxSeenTime)
                         {
-                            detected();
+                            detected(lineOfSight.collider.gameObject);
                         }
                     }
                 }
             }
         }
     }
-    void detected()
+    void detected(GameObject detectedOBJ)
     {
-
+        movment.OverideTarget = detectedOBJ;
+        StartCoroutine(chase());
+    }
+    bool checkIfInZone()
+    {
+        for (int i = 0; i < collisons.Count; i++)
+        {
+            if(collisons[i].gameObject.tag == "Player")
+            {
+                return true;
+            }
+        }
+        return false;
     }
     //adds gameobjects to the inneer dettection list
     private void OnTriggerEnter2D(Collider2D collision)
@@ -75,6 +92,27 @@ public class AIDetection : MonoBehaviour
             {
                 collisons.Remove(collision.gameObject);
             }
+        }
+    }
+    IEnumerator chase()
+    {
+        while(chaseTime < maxChaseTime)
+        {
+            yield return new WaitForSeconds(1);
+            chaseTime += 1;
+        }
+        if(checkIfInZone() == true)
+        {
+            for (int i = 0; i < collisons.Count; i++)
+            {
+                if (collisons[i].gameObject.tag == "Player")
+                {
+                    //collisons[i].gameObject.
+                }
+            }
+        } else
+        {
+            movment.OverideTarget = null;
         }
     }
 }
